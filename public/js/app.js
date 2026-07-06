@@ -84,7 +84,7 @@
           </div>
           <div>
             <h4>Quick Links</h4>
-            <a href="${base}index.html">index</a>
+            <a href="${base}index.html">Home</a>
             <a href="${base}pages/about.html">About</a>
             <a href="${base}pages/contact.html">Contact</a>
             <a href="${base}pages/cart.html">Cart</a>
@@ -99,7 +99,7 @@
           <div>
             <h4>Contact</h4>
             <p><i class="fa-solid fa-envelope"></i> hello@purecarat.co</p>
-            <p><i class="fa-solid fa-phone"></i> +91 98765 43210</p>
+            <p><i class="fa-solid fa-phone"></i> +91 95422 64196</p>
             <form class="newsletter" onsubmit="event.preventDefault(); PCC.toast('Subscribed — thank you!', 'gold'); this.reset();">
               <input type="email" placeholder="Your email" required aria-label="Email address" />
               <button type="submit">Join</button>
