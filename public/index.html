@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gold Works. — Pure Carat Co</title>
+  <meta name="description" content="Pure Carat Co — Handcrafted luxury jewellery. Explore rings, necklaces, earrings, bracelets and more." />
+  <meta property="og:title" content="Gold Works. — Pure Carat Co" />
+  <meta property="og:description" content="Handcrafted luxury jewellery." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main>
+    <section class="hero" aria-label="Hero">
+      <div class="hero__overlay"></div>
+      <div class="hero__content">
+        <h1 class="hero__title">Gold Works.</h1>
+        <p class="hero__subtitle">Handcrafted heirlooms. Timeless brilliance. Pure Carat Co.</p>
+        <a class="btn btn--gold" href="#categories">Shop Now</a>
+      </div>
+    </section>
+
+    <section class="section" id="categories" aria-labelledby="catTitle">
+      <div class="container split">
+        <div>
+          <h2 id="catTitle" class="section__title">Shop by Category</h2>
+          <p class="section__lede">Curated collections crafted with intention.</p>
+          <div class="category-grid" id="categoryGrid"></div>
+        </div>
+        <aside class="offers" aria-label="Offers">
+          <h3 class="offers__title">Today's Offers</h3>
+          <div class="offer-card offer-card--dark">
+            <span class="offer-card__tag">Festival Special</span>
+            <h4>Up to 25% Off</h4>
+            <p>On select gold collections this season.</p>
+          </div>
+          <div class="offer-card">
+            <span class="offer-card__tag">Featured</span>
+            <h4>Bridal Edit</h4>
+            <p>Timeless pieces for your forever day.</p>
+          </div>
+          <div class="offer-card offer-card--gold">
+            <span class="offer-card__tag">New</span>
+            <h4>Everyday Gold</h4>
+            <p>Lightweight designs for daily elegance.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section--muted" aria-labelledby="featTitle">
+      <div class="container">
+        <h2 id="featTitle" class="section__title">Featured Pieces</h2>
+        <div class="product-grid" id="featuredGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="promiseTitle">
+      <div class="container promise">
+        <h2 id="promiseTitle" class="section__title">The Pure Carat Promise</h2>
+        <div class="promise__grid">
+          <div class="promise__item"><i class="fa-solid fa-shield-halved"></i><h4>Certified Purity</h4><p>Every piece hallmarked and certified.</p></div>
+          <div class="promise__item"><i class="fa-solid fa-truck"></i><h4>Insured Delivery</h4><p>Discreet, insured worldwide shipping.</p></div>
+          <div class="promise__item"><i class="fa-solid fa-arrows-rotate"></i><h4>Lifetime Exchange</h4><p>Trade up as your story grows.</p></div>
+          <div class="promise__item"><i class="fa-solid fa-gem"></i><h4>Handcrafted</h4><p>Made by master artisans.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <div class="search-overlay__inner">
+      <input type="search" id="searchInput" placeholder="Search rings, necklaces, earrings…" aria-label="Search products" />
+      <button class="icon-btn" id="searchClose" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <script src="data/products.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/pagination.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      PCC.renderCategoryGrid('categoryGrid');
+      PCC.renderFeatured('featuredGrid', 8);
+    });
+  </script>
+</body>
+</html>

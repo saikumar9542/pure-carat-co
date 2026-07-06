@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Gold Works.</title>
+  <meta name="description" content="Reach out to Pure Carat Co — we'd love to hear from you." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main>
+    <section class="page-hero"><div class="container"><div class="breadcrumb">Home / Contact</div><h1>Get in Touch</h1><p>We'd love to help you find the perfect piece.</p></div></section>
+    <section class="section">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="contact-info__item"><i class="fa-solid fa-envelope"></i><div><h4>Email</h4><p>hello@purecarat.co</p></div></div>
+            <div class="contact-info__item"><i class="fa-solid fa-phone"></i><div><h4>Phone</h4><p>+91 98765 43210</p></div></div>
+            <div class="contact-info__item"><i class="fa-solid fa-location-dot"></i><div><h4>Atelier</h4><p>12 Karat Lane, Mumbai 400001</p></div></div>
+            <div class="contact-info__item"><i class="fa-solid fa-clock"></i><div><h4>Hours</h4><p>Mon–Sat · 11am–7pm</p></div></div>
+          </div>
+          <form onsubmit="event.preventDefault(); PCC.toast('Message sent — we\'ll be in touch soon.', 'gold'); this.reset();">
+            <div class="form-grid">
+              <div class="field field--full"><label>Name</label><input required /></div>
+              <div class="field"><label>Email</label><input type="email" required /></div>
+              <div class="field"><label>Phone</label><input /></div>
+              <div class="field field--full"><label>Message</label><textarea required></textarea></div>
+            </div>
+            <button type="submit" class="btn btn--gold" style="margin-top:20px;">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true"><div class="search-overlay__inner"><input type="search" id="searchInput" placeholder="Search…" aria-label="Search products" /><button class="icon-btn" id="searchClose" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button><div class="search-results" id="searchResults"></div></div></div>
+
+  <script src="../data/products.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/products.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

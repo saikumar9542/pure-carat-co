@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart — Gold Works.</title>
+  <meta name="description" content="Review your selected pieces before checkout." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">Home / Cart</div>
+        <h1>Your Bag</h1>
+        <p>Review your selections and proceed to checkout.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" id="cartMain"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <div class="search-overlay__inner">
+      <input type="search" id="searchInput" placeholder="Search…" aria-label="Search products" />
+      <button class="icon-btn" id="searchClose" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <script src="../data/products.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/products.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    function renderCart() {
+      const main = document.getElementById('cartMain');
+      const items = PCC.cart.items();
+      if (!items.length) {
+        main.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <h2>Your bag is empty</h2>
+            <p>Discover pieces that speak to you.</p>
+            <a class="btn btn--gold" href="../index.html">Shop Collections</a>
+          </div>`;
+        return;
+      }
+      const subtotal = PCC.cart.subtotal();
+      const shipping = subtotal >= 20000 ? 0 : 250;
+      const total = subtotal + shipping;
+      main.innerHTML = `
+        <div class="cart-layout">
+          <div class="cart-list">
+            ${items.map((i) => `
+              <div class="cart-item" data-id="${i.id}">
+                <img src="${i.image}" alt="${i.name}" loading="lazy" />
+                <div>
+                  <h3 class="cart-item__name">${i.name}</h3>
+                  <p class="cart-item__price">${PCC.formatPrice(i.price)}</p>
+                  <div class="qty" role="group" aria-label="Quantity">
+                    <button type="button" data-dec="${i.id}" aria-label="Decrease">−</button>
+                    <span>${i.qty}</span>
+                    <button type="button" data-inc="${i.id}" aria-label="Increase">+</button>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+                  <div style="font-weight:600">${PCC.formatPrice(i.price * i.qty)}</div>
+                  <button class="cart-item__remove" data-remove="${i.id}" aria-label="Remove"><i class="fa-solid fa-trash"></i></button>
+                </div>
+              </div>`).join('')}
+          </div>
+          <aside class="cart-summary">
+            <h3>Summary</h3>
+            <div class="cart-summary__row"><span>Subtotal</span><span>${PCC.formatPrice(subtotal)}</span></div>
+            <div class="cart-summary__row"><span>Shipping</span><span>${shipping ? PCC.formatPrice(shipping) : 'Free'}</span></div>
+            <div class="cart-summary__row cart-summary__row--total"><span>Total</span><span>${PCC.formatPrice(total)}</span></div>
+            <a class="btn btn--gold" href="checkout.html">Proceed to Checkout</a>
+            <a class="btn btn--outline" href="../index.html" style="margin-top:10px">Continue Shopping</a>
+          </aside>
+        </div>`;
+    }
+
+    document.addEventListener('click', (e) => {
+      const inc = e.target.closest('[data-inc]');
+      const dec = e.target.closest('[data-dec]');
+      const rm = e.target.closest('[data-remove]');
+      if (inc) { const id = Number(inc.dataset.inc); const it = PCC.cart.items().find((i)=>i.id===id); if (it) PCC.cart.setQty(id, it.qty + 1); }
+      if (dec) { const id = Number(dec.dataset.dec); const it = PCC.cart.items().find((i)=>i.id===id); if (it) PCC.cart.setQty(id, it.qty - 1); }
+      if (rm)  { PCC.cart.remove(Number(rm.dataset.remove)); }
+    });
+
+    document.addEventListener('pcc:cart:changed', renderCart);
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+</body>
+</html>
