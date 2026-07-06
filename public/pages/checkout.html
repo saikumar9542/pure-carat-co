@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Gold Works.</title>
+  <meta name="description" content="Complete your order at Pure Carat Co." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">Home / Cart / Checkout</div>
+        <h1>Checkout</h1>
+        <p>Just a few details to finalise your order.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container" id="checkoutMain">
+        <div class="checkout-layout">
+          <form id="checkoutForm" novalidate>
+            <div class="form-grid">
+              <div class="field field--full"><label for="name">Full name</label><input id="name" name="name" required /></div>
+              <div class="field"><label for="mobile">Mobile</label><input id="mobile" name="mobile" required pattern="[0-9+ ]{7,}" /></div>
+              <div class="field"><label for="pincode">Pincode</label><input id="pincode" name="pincode" required /></div>
+              <div class="field field--full"><label for="address">Address</label><input id="address" name="address" required /></div>
+              <div class="field"><label for="city">City</label><input id="city" name="city" required /></div>
+              <div class="field"><label for="state">State</label><input id="state" name="state" required /></div>
+              <div class="field field--full"><label for="message">Message (optional)</label><textarea id="message" name="message"></textarea></div>
+            </div>
+            <button type="submit" class="btn btn--gold" style="margin-top:20px;">Confirm Order</button>
+          </form>
+          <aside class="order-summary" id="orderSummary"></aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <div class="search-overlay__inner">
+      <input type="search" id="searchInput" placeholder="Search…" aria-label="Search products" />
+      <button class="icon-btn" id="searchClose" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <script src="../data/products.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/products.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/checkout.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => PCC.initCheckout());</script>
+</body>
+</html>
