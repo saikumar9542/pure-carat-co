@@ -13,9 +13,9 @@
   function resolveHref(key) {
     const base = PCC.base();
     switch (key) {
-      case 'index':       return `${base}index.html`;
+      case 'home':       return `${base}index.html`;
       case 'categories': return `${base}index.html#categories`;
-      case 'products':   return `${base}index.html#categories`;
+      case 'products':   return `${base}index.html#products`;
       case 'about':      return `${base}pages/about.html`;
       case 'contact':    return `${base}pages/contact.html`;
       case 'cart':       return `${base}pages/cart.html`;
@@ -29,7 +29,7 @@
     const base = PCC.base();
     host.innerHTML = `
       <div class="header-inner">
-        <a class="brand" href="${base}index.html" aria-label="Pure Carat Co index">
+        <a class="brand" href="${base}index.html" aria-label="Pure Carat Co home">
           <span class="brand__mark">P</span>
           <span>
             <span class="brand__name">PURE CARAT</span><br />
@@ -45,18 +45,14 @@
             <i class="fa-solid fa-bag-shopping"></i>
             <span class="cart-count" data-cart-count style="display:none">0</span>
           </a>
-          <button class="icon-btn" aria-label="Account"><i class="fa-regular fa-user"></i></button>
-          <!--
+          <a class="icon-btn" href="${base}pages/admin/login.html" aria-label="Admin" title="Admin"><i class="fa-solid fa-user-shield"></i></a>
           <button class="icon-btn hamburger" id="openMenu" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
-          -->
         </div>
       </div>
-      <!-- 
       <div class="mobile-nav" id="mobileNav" aria-hidden="true">
         ${NAV_LINKS.map((l) => `<a href="${resolveHref(l.href)}">${l.label}</a>`).join('')}
         <a href="${resolveHref('cart')}">Cart</a>
       </div>
-       -->
     `;
 
     document.getElementById('openMenu')?.addEventListener('click', () => {
@@ -106,7 +102,10 @@
             </form>
           </div>
         </div>
-        <div class="footer-bottom">© ${new Date().getFullYear()} Pure Carat Co. All rights reserved.</div>
+        <div class="footer-bottom">
+          © ${new Date().getFullYear()} Pure Carat Co. All rights reserved.
+          · <a href="${base}pages/admin/login.html" class="footer-admin-link">Admin</a>
+        </div>
       </div>
     `;
   }
@@ -153,7 +152,7 @@
         row.appendChild(PCC.el('img', { src: p.image, alt: p.name, loading: 'lazy' }));
         const meta = PCC.el('div', {});
         meta.appendChild(PCC.el('h4', { class: 'search-result__name' }, p.name));
-        meta.appendChild(PCC.el('div', { class: 'search-result__price' }, PCC.formatPrice(p.price)));
+        meta.appendChild(PCC.el('div', { class: 'search-result__price' }, PCC.formatPrice(PCC.pricing.priceOf(p))));
         row.appendChild(meta);
         results.appendChild(row);
       });

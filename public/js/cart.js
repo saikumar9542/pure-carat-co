@@ -1,4 +1,6 @@
-/* Cart logic — LocalStorage backed */
+/* Cart logic — LocalStorage backed. Prices are snapshotted at add time
+   using the live pricing engine so a later rate change doesn't rewrite
+   what the customer agreed to pay. */
 (function (global) {
   const PCC = global.PCC || (global.PCC = {});
 
@@ -12,8 +14,9 @@
       if (!p) return;
       const items = this.items();
       const existing = items.find((i) => i.id === p.id);
+      const price = PCC.pricing.priceOf(p);
       if (existing) existing.qty += qty;
-      else items.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty });
+      else items.push({ id: p.id, name: p.name, price, image: p.image, qty });
       PCC.storage.setCart(items);
       PCC.toast(`${p.name} added to cart`, 'gold');
     },
@@ -23,11 +26,8 @@
       PCC.storage.setCart(items);
     },
 
-    remove(id) {
-      PCC.storage.setCart(this.items().filter((i) => i.id !== id));
-    },
-
-    clear() { PCC.storage.clearCart(); },
+    remove(id) { PCC.storage.setCart(this.items().filter((i) => i.id !== id)); },
+    clear()   { PCC.storage.clearCart(); },
   };
 
   PCC.updateCartCount = function () {
@@ -40,7 +40,6 @@
 
   document.addEventListener('pcc:cart:changed', PCC.updateCartCount);
 
-  /* Delegated add-to-cart handler */
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-add-cart]');
     if (!btn) return;
