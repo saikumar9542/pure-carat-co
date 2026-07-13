@@ -1,54 +1,67 @@
 /* -------------------------------------------------------------------------
  * Google Apps Script integration + LocalStorage helpers.
- *
- * To connect Google Sheets:
- * 1. Create an Apps Script Web App bound to your spreadsheet.
- * 2. Deploy it as a Web App (execute as: Me, access: Anyone).
- * 3. Paste the resulting URL below into SCRIPT_URL.
  * ------------------------------------------------------------------------- */
 (function (global) {
   const PCC = global.PCC || (global.PCC = {});
 
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGBzriktaptjOYDnjObbeTtCO7YXKzHCgFY-S-U-bCBuOBh6njCLoLJmI2GFRE8me1nA/exec'; // <-- paste your deployed Apps Script Web App URL here
+  // Deployed Web App URL (execute as Me, access Anyone).
+  //const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGBzriktaptjOYDnjObbeTtCO7YXKzHCgFY-S-U-bCBuOBh6njCLoLJmI2GFRE8me1nA/exec';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgBdRKzFxnH4aTpCpYQlFFh0HEsDNLK5vLfaIFuEozNTH2XJq1ya7xDRHmkWKef1N4ng/exec';
 
-  const CART_KEY = 'pcc:cart:v1';
+  const CART_KEY     = 'pcc:cart:v1';
   const CUSTOMER_KEY = 'pcc:customer:v1';
+  const ADMIN_KEY    = 'pcc:admin:v1';
 
   PCC.storage = {
-    getCart() {
-      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-      catch { return []; }
-    },
+    getCart() { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } },
     setCart(items) {
       localStorage.setItem(CART_KEY, JSON.stringify(items));
       document.dispatchEvent(new CustomEvent('pcc:cart:changed'));
     },
     clearCart() { this.setCart([]); },
+
     saveCustomer(c) { localStorage.setItem(CUSTOMER_KEY, JSON.stringify(c)); },
-    getCustomer() {
-      try { return JSON.parse(localStorage.getItem(CUSTOMER_KEY)); }
-      catch { return null; }
-    },
+    getCustomer()   { try { return JSON.parse(localStorage.getItem(CUSTOMER_KEY)); } catch { return null; } },
+
+    saveAdmin(a)    { sessionStorage.setItem(ADMIN_KEY, JSON.stringify(a)); },
+    getAdmin()      { try { return JSON.parse(sessionStorage.getItem(ADMIN_KEY)); } catch { return null; } },
+    clearAdmin()    { sessionStorage.removeItem(ADMIN_KEY); },
   };
 
-  /* ------- Google Sheets submission ------- */
+  /* ------- Apps Script transport (text/plain to avoid CORS preflight) ------- */
+  async function post(body) {
+    if (!SCRIPT_URL) return { ok: false, error: 'SCRIPT_URL not configured' };
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(body),
+        redirect: 'follow',
+      });
+      const text = await res.text();
+      let data = {};
+      try { data = JSON.parse(text); } catch { data = { ok: false, error: 'Bad response', raw: text }; }
+      return data;
+    } catch (err) {
+      console.error('[PCC] request failed', err);
+      return { ok: false, error: err.message };
+    }
+  }
+
+  PCC.api = {
+    submitOrder: (order)      => post({ action: 'createOrder', payload: order }),
+    login:       (creds)      => post({ action: 'login', payload: creds }),
+    getOrders:   (token)      => post({ action: 'getOrders', token }),
+    updateStatus:(token, o)   => post({ action: 'updateOrderStatus', token, payload: o }),
+  };
+
+  /* Back-compat alias used by checkout.js */
   PCC.submitOrder = async function (order) {
     if (!SCRIPT_URL) {
       console.warn('[PCC] SCRIPT_URL is empty — order saved locally only.');
       return { ok: true, offline: true };
     }
-    try {
-      // Apps Script Web Apps accept text/plain to avoid CORS preflight.
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'createOrder', payload: order }),
-      });
-      const data = await res.json().catch(() => ({}));
-      return { ok: res.ok, data };
-    } catch (err) {
-      console.error('[PCC] Order submit failed', err);
-      return { ok: false, error: err.message };
-    }
+    const data = await PCC.api.submitOrder(order);
+    return { ok: !!data.ok, data, offline: false };
   };
 })(window);

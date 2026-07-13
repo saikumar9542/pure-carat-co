@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Sign in — Pure Carat Co</title>
+  <meta name="description" content="Pure Carat Co administrator sign-in." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body class="admin-body">
+  <main class="admin-auth">
+    <div class="admin-auth__card">
+      <a class="admin-auth__brand" href="../../index.html">
+        <span class="brand__mark">P</span>
+        <span>
+          <span class="brand__name">PURE CARAT</span><br />
+          <span class="brand__tag">Admin</span>
+        </span>
+      </a>
+      <h1>Sign in</h1>
+      <p class="admin-auth__lede">Access the rate updater and orders dashboard.</p>
+
+      <form id="adminLoginForm" novalidate>
+        <div class="field field--full">
+          <label for="username">Username</label>
+          <input id="username" name="username" autocomplete="username" required />
+        </div>
+        <div class="field field--full">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
+        <div class="admin-auth__error" id="adminLoginError" role="alert"></div>
+        <button type="submit" class="btn btn--gold" style="width:100%;margin-top:14px;">Sign in</button>
+      </form>
+
+      <p class="admin-auth__hint">
+        Default seed: <code>admin / admin123</code> — change it in the <em>Admin</em> sheet.
+      </p>
+    </div>
+  </main>
+
+  <script src="../../data/products.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/pricing.js"></script>
+  <script src="../../js/storage.js"></script>
+  <script src="../../js/admin.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => PCC.initAdminLogin());</script>
+</body>
+</html>

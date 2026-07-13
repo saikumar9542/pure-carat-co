@@ -1,4 +1,4 @@
-/* Product & category rendering */
+/* Product & category rendering — uses live pricing engine */
 (function (global) {
   const PCC = global.PCC || (global.PCC = {});
 
@@ -34,13 +34,21 @@
   };
 
   PCC.renderProductCard = function (p) {
+    const price = PCC.pricing.priceOf(p);
     const card = PCC.el('article', { class: 'product-card', 'data-id': p.id });
     const media = PCC.el('div', { class: 'product-card__media' });
     media.appendChild(PCC.el('img', { src: p.image, alt: p.name, loading: 'lazy' }));
     const body = PCC.el('div', { class: 'product-card__body' });
     body.appendChild(PCC.el('h3', { class: 'product-card__name' }, p.name));
     body.appendChild(PCC.el('p', { class: 'product-card__desc' }, p.description));
-    body.appendChild(PCC.el('div', { class: 'product-card__price' }, PCC.formatPrice(p.price)));
+    if (p.goldWeight) {
+      body.appendChild(PCC.el('p', { class: 'product-card__weight' },
+        `${p.goldWeight} g gold${p.silverWeight ? ` · ${p.silverWeight} g silver` : ''}`));
+    }
+    body.appendChild(PCC.el('div', {
+      class: 'product-card__price',
+      'data-product-price': p.id,
+    }, PCC.formatPrice(price)));
     const actions = PCC.el('div', { class: 'product-card__actions' });
     const addBtn = PCC.el('button', {
       class: 'btn btn--dark btn--sm',

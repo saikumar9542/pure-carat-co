@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Pure Carat Co</title>
+  <meta name="description" content="Update market rates and view orders." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body class="admin-body">
+  <header class="admin-header">
+    <a class="admin-header__brand" href="../../index.html">
+      <span class="brand__mark">P</span>
+      <span>
+        <span class="brand__name">PURE CARAT</span>
+        <span class="brand__tag">Admin</span>
+      </span>
+    </a>
+    <div class="admin-header__actions">
+      <span class="admin-header__user"><i class="fa-regular fa-user"></i> <span id="adminWho"></span></span>
+      <a class="btn btn--outline btn--sm" href="../../index.html"><i class="fa-solid fa-arrow-up-right-from-square"></i> View site</a>
+      <button class="btn btn--dark btn--sm" id="adminLogout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+    </div>
+  </header>
+
+  <nav class="admin-tabs" aria-label="Sections">
+    <button type="button" data-tab="rates"><i class="fa-solid fa-scale-balanced"></i> Market Rates</button>
+    <button type="button" data-tab="orders"><i class="fa-solid fa-receipt"></i> Orders</button>
+  </nav>
+
+  <main class="admin-main">
+    <!-- Rates panel -->
+    <section class="admin-panel" data-panel="rates">
+      <div class="admin-panel__head">
+        <div>
+          <h1>Update market rates</h1>
+          <p>Set today's gold & silver rate (₹ per gram). Every product price on the site refreshes instantly.</p>
+        </div>
+      </div>
+
+      <div class="rates-grid">
+        <form id="ratesForm" class="rates-form">
+          <div class="field">
+            <label for="rateGold">Gold rate (₹ / gram)</label>
+            <input id="rateGold" name="gold" type="number" min="0" step="1" required />
+          </div>
+          <div class="field">
+            <label for="rateSilver">Silver rate (₹ / gram)</label>
+            <input id="rateSilver" name="silver" type="number" min="0" step="1" required />
+          </div>
+          <div class="field">
+            <label for="rateMaking">Making charges (₹, per piece)</label>
+            <input id="rateMaking" name="making" type="number" min="0" step="1" required />
+          </div>
+          <div class="field field--full">
+            <button type="submit" class="btn btn--gold">Save & apply</button>
+            <p id="ratesMeta" class="rates-meta"></p>
+          </div>
+          <div class="field field--full rates-formula">
+            <i class="fa-solid fa-calculator"></i>
+            <span>price = (gold weight × gold rate) + (silver weight × silver rate) + making charges</span>
+          </div>
+        </form>
+
+        <aside class="rates-preview">
+          <h3>Live preview</h3>
+          <p class="rates-preview__lede">Sample products recalculated using the values in the form.</p>
+          <div id="ratesPreview"></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Orders panel -->
+    <section class="admin-panel" data-panel="orders">
+      <div class="admin-panel__head">
+        <div>
+          <h1>Orders</h1>
+          <p id="ordersMeta">Fetching…</p>
+        </div>
+        <div class="admin-panel__toolbar">
+          <input type="search" id="ordersSearch" placeholder="Search name, mobile, order id…" />
+          <button class="btn btn--outline btn--sm" id="ordersRefresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+          <button class="btn btn--dark btn--sm" id="ordersExport"><i class="fa-solid fa-download"></i> Export CSV</button>
+        </div>
+      </div>
+
+      <div class="orders-table-wrap">
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th><th>Date</th><th>Customer</th><th>Mobile</th>
+              <th>Products</th><th>Qty</th><th>Total</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../data/products.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/pricing.js"></script>
+  <script src="../../js/storage.js"></script>
+  <script src="../../js/admin.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => PCC.initAdminDashboard());</script>
+</body>
+</html>
