@@ -22,19 +22,40 @@
         <div class="contact-grid">
           <div class="contact-info">
             <div class="contact-info__item"><i class="fa-solid fa-envelope"></i><div><h4>Email</h4><p>hello@purecarat.co</p></div></div>
-            <div class="contact-info__item"><i class="fa-solid fa-phone"></i><div><h4>Phone</h4><p>+91 95422 64196</p></div></div>
+            <div class="contact-info__item"><i class="fa-solid fa-phone"></i><div><h4>Phone</h4><p>+91 98765 43210</p></div></div>
             <div class="contact-info__item"><i class="fa-solid fa-location-dot"></i><div><h4>Atelier</h4><p>12 Karat Lane, Mumbai 400001</p></div></div>
             <div class="contact-info__item"><i class="fa-solid fa-clock"></i><div><h4>Hours</h4><p>Mon–Sat · 11am–7pm</p></div></div>
           </div>
-          <form onsubmit="event.preventDefault(); PCC.toast('Message sent — we\'ll be in touch soon.', 'gold'); this.reset();">
+          <form id="contactForm" novalidate>
             <div class="form-grid">
-              <div class="field field--full"><label>Name</label><input required /></div>
-              <div class="field"><label>Email</label><input type="email" required /></div>
-              <div class="field"><label>Phone</label><input /></div>
-              <div class="field field--full"><label>Message</label><textarea required></textarea></div>
+              <div class="field field--full"><label>Name</label><input name="name" required minlength="2" maxlength="80" /></div>
+              <div class="field"><label>Email</label><input name="email" type="email" required maxlength="120" /></div>
+              <div class="field"><label>Phone</label><input name="phone" type="tel" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10 digits" /></div>
+              <div class="field field--full"><label>Message</label><textarea name="message" required minlength="10" maxlength="500"></textarea></div>
             </div>
-            <button type="submit" class="btn btn--gold" style="margin-top:20px;">Send Message</button>
+            <p id="contactError" class="admin-auth__error" role="alert" style="margin-top:10px"></p>
+            <button type="submit" class="btn btn--gold" style="margin-top:10px;">Send Message</button>
           </form>
+          <script>
+            document.getElementById('contactForm').addEventListener('submit', (e) => {
+              e.preventDefault();
+              const f = e.currentTarget;
+              const err = document.getElementById('contactError');
+              err.textContent = '';
+              if (!f.checkValidity()) {
+                err.textContent = 'Please fill all required fields correctly.';
+                const first = f.querySelector(':invalid'); if (first) first.focus();
+                return;
+              }
+              const phone = String(f.phone.value || '').replace(/\D/g, '');
+              if (phone && !/^[6-9]\d{9}$/.test(phone)) {
+                err.textContent = 'Phone must be a valid 10-digit Indian mobile number.';
+                f.phone.focus(); return;
+              }
+              PCC.toast("Message sent — we'll be in touch soon.", 'gold');
+              f.reset();
+            });
+          </script>
         </div>
       </div>
     </section>

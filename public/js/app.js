@@ -3,7 +3,7 @@
   const PCC = global.PCC || (global.PCC = {});
 
   const NAV_LINKS = [
-    { href: 'index',       label: 'Home' },
+    { href: 'home',       label: 'Home' },
     { href: 'categories', label: 'Categories' },
     { href: 'products',   label: 'Products' },
     { href: 'about',      label: 'About' },
@@ -15,7 +15,7 @@
     switch (key) {
       case 'home':       return `${base}index.html`;
       case 'categories': return `${base}index.html#categories`;
-      case 'products':   return `${base}index.html#products`;
+      case 'products':   return `${base}index.html#categories`;
       case 'about':      return `${base}pages/about.html`;
       case 'contact':    return `${base}pages/contact.html`;
       case 'cart':       return `${base}pages/cart.html`;
@@ -55,9 +55,23 @@
       </div>
     `;
 
-    document.getElementById('openMenu')?.addEventListener('click', () => {
-      document.getElementById('mobileNav').classList.toggle('open');
+    const menuBtn = document.getElementById('openMenu');
+    const mobileNav = document.getElementById('mobileNav');
+    menuBtn?.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      mobileNav.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      document.body.classList.toggle('nav-open', isOpen);
+      menuBtn.innerHTML = isOpen
+        ? '<i class="fa-solid fa-xmark"></i>'
+        : '<i class="fa-solid fa-bars"></i>';
     });
+    // Close on link click
+    mobileNav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      mobileNav.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('nav-open');
+      if (menuBtn) menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    }));
     document.getElementById('openSearch')?.addEventListener('click', openSearch);
   }
 
@@ -128,9 +142,12 @@
     const input = document.getElementById('searchInput');
     const results = document.getElementById('searchResults');
     const closeBtn = document.getElementById('searchClose');
+    const overlay = document.getElementById('searchOverlay');
     if (!input || !results) return;
     closeBtn?.addEventListener('click', closeSearch);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSearch(); });
+    // Click the dim backdrop to dismiss.
+    overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
     input.addEventListener('input', PCC.debounce(() => {
       const q = input.value.trim().toLowerCase();
       results.innerHTML = '';
@@ -149,6 +166,7 @@
           class: 'search-result',
           href: `${PCC.base()}pages/category.html?cat=${p.category}`,
         });
+        row.addEventListener('click', closeSearch);
         row.appendChild(PCC.el('img', { src: p.image, alt: p.name, loading: 'lazy' }));
         const meta = PCC.el('div', {});
         meta.appendChild(PCC.el('h4', { class: 'search-result__name' }, p.name));

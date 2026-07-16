@@ -22,17 +22,20 @@
       const btn = form.querySelector('button[type=submit]');
       btn.disabled = true; btn.textContent = 'Signing in…';
 
-      // Try Apps Script first; fall back to local seed (admin/admin123) so the
-      // rate updater is usable before the Web App is deployed / seeded.
-      let res = await PCC.api.login({ username, password }).catch(() => ({ ok: false }));
-      if (!res.ok && username.toLowerCase() === 'admin' && password === 'admin123') {
+      let res = await PCC.api.login({ username, password }).catch((e) => ({ ok: false, error: String(e) }));
+
+      // Only allow local admin/admin123 fallback when the backend is completely
+      // unreachable (network / not deployed). If the server responded with
+      // "invalid credentials", respect that answer.
+      const backendReachable = res && (res.ok || res.error === 'Invalid credentials' || (res.error || '').toLowerCase().includes('admin sheet'));
+      if (!res.ok && !backendReachable && username.toLowerCase() === 'admin' && password === 'admin123') {
         res = { ok: true, token: 'local-fallback', username: 'admin', role: 'admin', local: true };
       }
       if (res.ok) {
         PCC.storage.saveAdmin({ token: res.token, username: res.username, role: res.role, local: !!res.local });
         location.href = 'dashboard.html';
       } else {
-        err.textContent = res.error || 'Login failed. If the Apps Script isn\'t deployed yet, use admin / admin123.';
+        err.textContent = res.error || 'Login failed.';
         btn.disabled = false; btn.textContent = 'Sign in';
       }
     });
@@ -43,27 +46,33 @@
     const admin = PCC.storage.getAdmin();
     if (!admin) { location.href = 'login.html'; return; }
 
-    // Header
     document.getElementById('adminWho').textContent = admin.username;
+    const welcomeName = document.getElementById('welcomeName');
+    if (welcomeName) welcomeName.textContent = admin.username;
     document.getElementById('adminLogout').addEventListener('click', () => {
       PCC.storage.clearAdmin();
       location.href = 'login.html';
     });
 
-    // Tab switching
+    const tabsNav = document.getElementById('adminTabs');
+    function activateTab(name) {
+      document.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
+      document.querySelectorAll('[data-panel]').forEach((p) => p.classList.toggle('active', p.dataset.panel === name));
+      if (tabsNav) tabsNav.hidden = (name === 'welcome');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     document.querySelectorAll('[data-tab]').forEach((btn) => {
       btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
-    activateTab('rates');
+    document.querySelectorAll('[data-goto]').forEach((btn) => {
+      btn.addEventListener('click', () => activateTab(btn.dataset.goto));
+    });
+    activateTab('welcome');
 
     initRatesTab();
     initOrdersTab(admin.token);
   };
-
-  function activateTab(name) {
-    document.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
-    document.querySelectorAll('[data-panel]').forEach((p) => p.classList.toggle('active', p.dataset.panel === name));
-  }
 
   /* ---- Rates tab ---- */
   function initRatesTab() {
@@ -74,19 +83,40 @@
     const meta  = document.getElementById('ratesMeta');
     const prev  = document.getElementById('ratesPreview');
 
+    // Pull latest server-side rates so admin always edits the shared value.
+    PCC.pricing.refreshFromServer().then(() => {
+      const r = PCC.pricing.rates();
+      gold.value = r.gold; silv.value = r.silver; make.value = r.makingCharges;
+      renderMeta(r); renderPreview();
+    });
+
     const r = PCC.pricing.rates();
     gold.value = r.gold; silv.value = r.silver; make.value = r.makingCharges;
     renderMeta(r); renderPreview();
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const next = PCC.pricing.setRates({
+      const btn = form.querySelector('button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Saving…';
+      const admin = PCC.storage.getAdmin() || {};
+      const payload = {
         gold:          Number(gold.value) || 0,
         silver:        Number(silv.value) || 0,
         makingCharges: Number(make.value) || 0,
-      });
-      renderMeta(next); renderPreview();
-      PCC.toast('Rates updated — all product prices refreshed', 'gold');
+      };
+      try {
+        await PCC.pricing.setRates(payload, admin.token);
+        renderMeta(PCC.pricing.rates()); renderPreview();
+        if (admin.token === 'local-fallback') {
+          PCC.toast('Saved locally — deploy Apps Script for cross-device sync', 'gold');
+        } else {
+          PCC.toast('Rates updated for all visitors', 'gold');
+        }
+      } catch (err2) {
+        PCC.toast('Saved locally only: ' + err2.message);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Save & apply';
+      }
     });
 
     [gold, silv, make].forEach((i) => i.addEventListener('input', renderPreview));
@@ -154,17 +184,22 @@
         tbody.innerHTML = `<tr><td colspan="8" class="orders-empty">No orders${q ? ' match your search' : ' yet'}.</td></tr>`;
         return;
       }
-      tbody.innerHTML = filtered.map((r) => `
+      tbody.innerHTML = filtered.map((r) => {
+        const mobile = String(r['Mobile'] ?? '').replace(/\s+/g, '');
+        const qty = Number(r['Quantity']) || 0;
+        const total = Number(r['Total']) || 0;
+        return `
         <tr>
-          <td>${escape(r['Order ID'])}</td>
-          <td>${formatDate(r['Date'])}</td>
-          <td>${escape(r['Customer Name'])}</td>
-          <td>${escape(r['Mobile'])}</td>
-          <td class="orders-products" title="${escape(r['Products'])}">${escape(r['Products'])}</td>
-          <td>${escape(r['Quantity'])}</td>
-          <td>${PCC.formatPrice(Number(r['Total']) || 0)}</td>
-          <td><span class="badge badge--${statusClass(r['Status'])}">${escape(r['Status'] || 'Pending')}</span></td>
-        </tr>`).join('');
+          <td data-label="Order ID">${escape(r['Order ID'])}</td>
+          <td data-label="Date">${formatDate(r['Date'])}</td>
+          <td data-label="Customer">${escape(r['Customer Name'])}</td>
+          <td data-label="Mobile" class="orders-mobile"><a href="tel:${escape(mobile)}">${escape(mobile)}</a></td>
+          <td data-label="Products" class="orders-products" title="${escape(r['Products'])}">${escape(r['Products'])}</td>
+          <td data-label="Qty" class="num">${qty}</td>
+          <td data-label="Total" class="num">${PCC.formatPrice(total)}</td>
+          <td data-label="Status"><span class="badge badge--${statusClass(r['Status'])}">${escape(r['Status'] || 'Pending')}</span></td>
+        </tr>`;
+      }).join('');
     }
 
     function exportCsv() {

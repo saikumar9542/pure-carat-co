@@ -2,11 +2,18 @@
 
 @media (max-width: 1024px) {
   .split { grid-template-columns: 1fr; }
-  .offers { position: static; flex-direction: row; overflow-x: auto; padding-bottom: 8px; }
+  .offers {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    max-height: none;
+  }
   .offers .offer-card { min-width: 260px; flex-shrink: 0; }
+  .offers__title { position: static; padding: 0 0 4px; background: transparent; }
   .cart-layout { grid-template-columns: 1fr; }
   .checkout-layout { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .contact-grid { grid-template-columns: 1fr; }
 }
 
@@ -25,7 +32,13 @@
   .cart-item { grid-template-columns: 80px 1fr; }
   .cart-item img { width: 80px; height: 80px; }
   .cart-item__remove { grid-column: 2; justify-self: start; padding: 0; }
-  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+
+  /* Footer: 2 columns on small tablets/phones */
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
 }
 
 @media (max-width: 480px) {
