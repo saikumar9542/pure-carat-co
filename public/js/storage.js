@@ -5,7 +5,6 @@
   const PCC = global.PCC || (global.PCC = {});
 
   // Deployed Web App URL (execute as Me, access Anyone).
-  //const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGBzriktaptjOYDnjObbeTtCO7YXKzHCgFY-S-U-bCBuOBh6njCLoLJmI2GFRE8me1nA/exec';
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgBdRKzFxnH4aTpCpYQlFFh0HEsDNLK5vLfaIFuEozNTH2XJq1ya7xDRHmkWKef1N4ng/exec';
 
   const CART_KEY     = 'pcc:cart:v1';
@@ -53,6 +52,15 @@
     login:       (creds)      => post({ action: 'login', payload: creds }),
     getOrders:   (token)      => post({ action: 'getOrders', token }),
     updateStatus:(token, o)   => post({ action: 'updateOrderStatus', token, payload: o }),
+    setRates:    (token, r)   => post({ action: 'setRates', token, payload: r }),
+    // GET so any visitor can read the shared rate without a token / preflight.
+    async getRates() {
+      if (!SCRIPT_URL) return { ok: false, error: 'SCRIPT_URL not configured' };
+      try {
+        const res = await fetch(SCRIPT_URL + '?action=getRates', { method: 'GET', redirect: 'follow' });
+        return await res.json();
+      } catch (err) { return { ok: false, error: err.message }; }
+    },
   };
 
   /* Back-compat alias used by checkout.js */
