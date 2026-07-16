@@ -29,15 +29,17 @@
         <div class="checkout-layout">
           <form id="checkoutForm" novalidate>
             <div class="form-grid">
-              <div class="field field--full"><label for="name">Full name</label><input id="name" name="name" required /></div>
-              <div class="field"><label for="mobile">Mobile</label><input id="mobile" name="mobile" required pattern="[0-9+ ]{7,}" /></div>
-              <div class="field"><label for="pincode">Pincode</label><input id="pincode" name="pincode" required /></div>
-              <div class="field field--full"><label for="address">Address</label><input id="address" name="address" required /></div>
-              <div class="field"><label for="city">City</label><input id="city" name="city" required /></div>
-              <div class="field"><label for="state">State</label><input id="state" name="state" required /></div>
-              <div class="field field--full"><label for="message">Message (optional)</label><textarea id="message" name="message"></textarea></div>
+              <div class="field field--full"><label for="name">Full name</label><input id="name" name="name" required minlength="2" maxlength="80" /></div>
+              <div class="field"><label for="mobile">Mobile (10 digits)</label><input id="mobile" name="mobile" type="tel" required inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="9876543210" /></div>
+              <div class="field"><label for="pincode">Pincode (6 digits)</label><input id="pincode" name="pincode" type="text" required inputmode="numeric" pattern="[1-9][0-9]{5}" maxlength="6" placeholder="560001" /></div>
+              <div class="field field--full"><label for="address">Address</label><input id="address" name="address" required minlength="6" maxlength="200" /></div>
+              <div class="field"><label for="city">City</label><input id="city" name="city" required pattern="[A-Za-z .'-]{2,}" maxlength="60" /></div>
+              <div class="field"><label for="state">State</label><input id="state" name="state" required pattern="[A-Za-z .'-]{2,}" maxlength="60" /></div>
+              <div class="field field--full"><label for="email">Email (optional)</label><input id="email" name="email" type="email" maxlength="120" /></div>
+              <div class="field field--full"><label for="message">Message (optional)</label><textarea id="message" name="message" maxlength="500"></textarea></div>
             </div>
-            <button type="submit" class="btn btn--gold" style="margin-top:20px;">Confirm Order</button>
+            <p id="checkoutError" class="admin-auth__error" role="alert" style="margin-top:10px"></p>
+            <button type="submit" class="btn btn--gold" style="margin-top:10px;">Confirm Order</button>
           </form>
           <aside class="order-summary" id="orderSummary"></aside>
         </div>

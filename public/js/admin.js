@@ -46,27 +46,33 @@
     const admin = PCC.storage.getAdmin();
     if (!admin) { location.href = 'login.html'; return; }
 
-    // Header
     document.getElementById('adminWho').textContent = admin.username;
+    const welcomeName = document.getElementById('welcomeName');
+    if (welcomeName) welcomeName.textContent = admin.username;
     document.getElementById('adminLogout').addEventListener('click', () => {
       PCC.storage.clearAdmin();
       location.href = 'login.html';
     });
 
-    // Tab switching
+    const tabsNav = document.getElementById('adminTabs');
+    function activateTab(name) {
+      document.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
+      document.querySelectorAll('[data-panel]').forEach((p) => p.classList.toggle('active', p.dataset.panel === name));
+      if (tabsNav) tabsNav.hidden = (name === 'welcome');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     document.querySelectorAll('[data-tab]').forEach((btn) => {
       btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
-    activateTab('rates');
+    document.querySelectorAll('[data-goto]').forEach((btn) => {
+      btn.addEventListener('click', () => activateTab(btn.dataset.goto));
+    });
+    activateTab('welcome');
 
     initRatesTab();
     initOrdersTab(admin.token);
   };
-
-  function activateTab(name) {
-    document.querySelectorAll('[data-tab]').forEach((b) => b.classList.toggle('active', b.dataset.tab === name));
-    document.querySelectorAll('[data-panel]').forEach((p) => p.classList.toggle('active', p.dataset.panel === name));
-  }
 
   /* ---- Rates tab ---- */
   function initRatesTab() {
@@ -178,17 +184,22 @@
         tbody.innerHTML = `<tr><td colspan="8" class="orders-empty">No orders${q ? ' match your search' : ' yet'}.</td></tr>`;
         return;
       }
-      tbody.innerHTML = filtered.map((r) => `
+      tbody.innerHTML = filtered.map((r) => {
+        const mobile = String(r['Mobile'] ?? '').replace(/\s+/g, '');
+        const qty = Number(r['Quantity']) || 0;
+        const total = Number(r['Total']) || 0;
+        return `
         <tr>
-          <td>${escape(r['Order ID'])}</td>
-          <td>${formatDate(r['Date'])}</td>
-          <td>${escape(r['Customer Name'])}</td>
-          <td>${escape(r['Mobile'])}</td>
-          <td class="orders-products" title="${escape(r['Products'])}">${escape(r['Products'])}</td>
-          <td>${escape(r['Quantity'])}</td>
-          <td>${PCC.formatPrice(Number(r['Total']) || 0)}</td>
-          <td><span class="badge badge--${statusClass(r['Status'])}">${escape(r['Status'] || 'Pending')}</span></td>
-        </tr>`).join('');
+          <td data-label="Order ID">${escape(r['Order ID'])}</td>
+          <td data-label="Date">${formatDate(r['Date'])}</td>
+          <td data-label="Customer">${escape(r['Customer Name'])}</td>
+          <td data-label="Mobile" class="orders-mobile"><a href="tel:${escape(mobile)}">${escape(mobile)}</a></td>
+          <td data-label="Products" class="orders-products" title="${escape(r['Products'])}">${escape(r['Products'])}</td>
+          <td data-label="Qty" class="num">${qty}</td>
+          <td data-label="Total" class="num">${PCC.formatPrice(total)}</td>
+          <td data-label="Status"><span class="badge badge--${statusClass(r['Status'])}">${escape(r['Status'] || 'Pending')}</span></td>
+        </tr>`;
+      }).join('');
     }
 
     function exportCsv() {

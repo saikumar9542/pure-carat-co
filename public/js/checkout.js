@@ -38,8 +38,33 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const errEl = document.getElementById('checkoutError');
+      if (errEl) errEl.textContent = '';
+
+      // Native constraint validation first.
+      if (!form.checkValidity()) {
+        const first = form.querySelector(':invalid');
+        if (first) first.focus();
+        if (errEl) errEl.textContent = 'Please fill all required fields correctly.';
+        return;
+      }
+
       const fd = new FormData(form);
       const customer = Object.fromEntries(fd.entries());
+
+      // Explicit checks for mobile & pincode.
+      const mobile = String(customer.mobile || '').replace(/\D/g, '');
+      const pincode = String(customer.pincode || '').replace(/\D/g, '');
+      if (!/^[6-9]\d{9}$/.test(mobile)) {
+        if (errEl) errEl.textContent = 'Enter a valid 10-digit Indian mobile number.';
+        form.mobile.focus(); return;
+      }
+      if (!/^[1-9]\d{5}$/.test(pincode)) {
+        if (errEl) errEl.textContent = 'Enter a valid 6-digit pincode.';
+        form.pincode.focus(); return;
+      }
+      customer.mobile = mobile; customer.pincode = pincode;
+
       const btn = form.querySelector('button[type="submit"]');
       btn.disabled = true; btn.textContent = 'Placing order…';
 
@@ -62,7 +87,7 @@
             <h2>Order confirmed</h2>
             <p>Order ID: <strong>${order.orderId}</strong></p>
             <p>${result.offline ? 'Saved locally — connect your Apps Script URL to sync with Google Sheets.' : "We've saved your order and will be in touch shortly."}</p>
-            <a class="btn btn--gold" href="../index.html">Back to Home</a>
+            <a class="btn btn--gold" href="../index.html">Back to home</a>
           </div>`;
       } else {
         PCC.toast('Something went wrong. Please try again.');

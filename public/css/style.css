@@ -512,13 +512,94 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; margin: 0 0
   background: var(--soft-grey); padding: 2px 6px; border-radius: 4px; font-size: 12px;
 }
 
+/* ---- Offers: sticky header + scrollable list on desktop ---- */
+.offers { max-height: calc(100vh - var(--header-h) - 60px); overflow-y: auto; padding-right: 4px; }
+.offers__title {
+  position: sticky; top: 0; z-index: 2;
+  background: var(--white); margin: 0 0 8px; padding: 6px 0 10px;
+  border-bottom: 1px solid var(--soft-grey);
+}
+
+/* ---- Admin welcome screen ---- */
+.admin-welcome { max-width: 900px; margin: 40px auto; text-align: center; padding: 0 8px; }
+.admin-welcome__eyebrow {
+  font-size: 12px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold-dark); margin: 0 0 8px;
+}
+.admin-welcome h1 { font-size: clamp(28px, 4vw, 44px); margin: 0 0 8px; }
+.admin-welcome__lede { color: var(--muted); margin: 0 0 32px; }
+.admin-welcome__cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px; text-align: left;
+}
+.admin-welcome__card {
+  background: var(--white); border: 1px solid var(--soft-grey);
+  border-radius: var(--radius-lg); padding: 28px; cursor: pointer;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.admin-welcome__card:hover {
+  transform: translateY(-4px); border-color: var(--gold);
+  box-shadow: var(--shadow-md);
+}
+.admin-welcome__icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--white); display: grid; place-items: center; font-size: 22px;
+}
+.admin-welcome__card h3 { font-size: 20px; margin: 0; }
+.admin-welcome__card p  { margin: 0; color: var(--muted); font-size: 14px; }
+.admin-welcome__cta {
+  margin-top: auto; color: var(--gold-dark); font-size: 12px;
+  letter-spacing: .18em; text-transform: uppercase; font-weight: 500;
+}
+
+/* ---- Orders table: numeric alignment & scrollable wrapper ---- */
+.orders-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.orders-table { min-width: 900px; }
+.orders-table th.num, .orders-table td.num { text-align: right; white-space: nowrap; }
+.orders-table td.orders-mobile { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.orders-table td.orders-mobile a { color: var(--ink); }
+.orders-table td.orders-mobile a:hover { color: var(--gold-dark); }
+
 @media (max-width: 900px) {
   .rates-grid { grid-template-columns: 1fr; }
   .rates-form { grid-template-columns: 1fr; }
   .admin-header { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
-  .admin-tabs { padding: 0 16px; overflow-x: auto; }
+  .admin-header__actions { flex-wrap: wrap; }
+  .admin-tabs { padding: 0 16px; overflow-x: auto; white-space: nowrap; }
+  .admin-tabs button { flex-shrink: 0; }
   .admin-main { padding: 20px 16px 60px; }
+  .admin-panel__toolbar { width: 100%; }
   .admin-panel__toolbar input[type=search] { min-width: 0; flex: 1; }
   .orders-table th, .orders-table td { padding: 10px 12px; font-size: 13px; }
-  .orders-products { max-width: 140px; }
+  .orders-products { max-width: 160px; }
 }
+
+/* ---- Orders: stacked card layout on phones ---- */
+@media (max-width: 640px) {
+  .orders-table-wrap { border: 0; background: transparent; overflow: visible; }
+  .orders-table { min-width: 0; width: 100%; display: block; }
+  .orders-table thead { display: none; }
+  .orders-table tbody, .orders-table tr, .orders-table td { display: block; width: 100%; }
+  .orders-table tr {
+    background: var(--white); border: 1px solid var(--soft-grey);
+    border-radius: var(--radius); padding: 12px 14px; margin-bottom: 12px;
+  }
+  .orders-table td {
+    padding: 6px 0; border: 0; display: flex; justify-content: space-between;
+    align-items: center; gap: 12px; font-size: 13px;
+  }
+  .orders-table td::before {
+    content: attr(data-label);
+    font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 500;
+  }
+  .orders-table td.orders-products {
+    max-width: none; white-space: normal; text-align: right;
+    color: var(--ink);
+  }
+  .orders-table td.num { justify-content: space-between; }
+  .admin-welcome { margin: 24px auto; }
+}
+

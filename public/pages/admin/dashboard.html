@@ -29,18 +29,42 @@
     </div>
   </header>
 
-  <nav class="admin-tabs" aria-label="Sections">
+  <nav class="admin-tabs" id="adminTabs" aria-label="Sections" hidden>
+    <button type="button" data-tab="welcome"><i class="fa-solid fa-house"></i> Home</button>
     <button type="button" data-tab="rates"><i class="fa-solid fa-scale-balanced"></i> Market Rates</button>
     <button type="button" data-tab="orders"><i class="fa-solid fa-receipt"></i> Orders</button>
   </nav>
 
   <main class="admin-main">
+    <!-- Welcome panel -->
+    <section class="admin-panel" data-panel="welcome">
+      <div class="admin-welcome">
+        <p class="admin-welcome__eyebrow">Welcome back</p>
+        <h1>Hello, <span id="welcomeName">Admin</span></h1>
+        <p class="admin-welcome__lede">Choose what you'd like to manage today.</p>
+        <div class="admin-welcome__cards">
+          <button type="button" class="admin-welcome__card" data-goto="rates">
+            <span class="admin-welcome__icon"><i class="fa-solid fa-scale-balanced"></i></span>
+            <h3>Market Rates</h3>
+            <p>Update today's gold &amp; silver rate. All product prices refresh live.</p>
+            <span class="admin-welcome__cta">Open <i class="fa-solid fa-arrow-right"></i></span>
+          </button>
+          <button type="button" class="admin-welcome__card" data-goto="orders">
+            <span class="admin-welcome__icon"><i class="fa-solid fa-receipt"></i></span>
+            <h3>Orders</h3>
+            <p>View customer orders from the connected Google Sheet, search &amp; export.</p>
+            <span class="admin-welcome__cta">Open <i class="fa-solid fa-arrow-right"></i></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- Rates panel -->
     <section class="admin-panel" data-panel="rates">
       <div class="admin-panel__head">
         <div>
           <h1>Update market rates</h1>
-          <p>Set today's gold & silver rate (₹ per gram). Every product price on the site refreshes instantly.</p>
+          <p>Set today's gold &amp; silver rate (₹ per gram). Every product price on the site refreshes instantly.</p>
         </div>
       </div>
 
@@ -59,7 +83,7 @@
             <input id="rateMaking" name="making" type="number" min="0" step="1" required />
           </div>
           <div class="field field--full">
-            <button type="submit" class="btn btn--gold">Save & apply</button>
+            <button type="submit" class="btn btn--gold">Save &amp; apply</button>
             <p id="ratesMeta" class="rates-meta"></p>
           </div>
           <div class="field field--full rates-formula">
@@ -95,7 +119,7 @@
           <thead>
             <tr>
               <th>Order ID</th><th>Date</th><th>Customer</th><th>Mobile</th>
-              <th>Products</th><th>Qty</th><th>Total</th><th>Status</th>
+              <th>Products</th><th class="num">Qty</th><th class="num">Total</th><th>Status</th>
             </tr>
           </thead>
           <tbody id="ordersBody"></tbody>
