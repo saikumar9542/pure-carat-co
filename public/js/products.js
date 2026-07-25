@@ -62,10 +62,33 @@
     return card;
   };
 
-  PCC.renderFeatured = function (mountId, limit) {
+  PCC.renderFeatured = function (mountId, limit = 3, expanded = false) {
     const mount = document.getElementById(mountId);
     if (!mount) return;
+
+    const initialLimit = Math.max(1, Number(limit) || 3);
+    const allProducts = PCC.getFeatured(FEATURED_IDS.length);
+    const visibleCount = expanded ? allProducts.length : Math.min(initialLimit, allProducts.length);
+
     mount.innerHTML = '';
-    PCC.getFeatured(limit).forEach((p) => mount.appendChild(PCC.renderProductCard(p)));
+    allProducts.slice(0, visibleCount).forEach((p) => mount.appendChild(PCC.renderProductCard(p)));
+
+    const existingToggle = mount.parentElement.querySelector('.featured-toggle');
+    if (existingToggle) existingToggle.remove();
+
+    if (allProducts.length > initialLimit) {
+      const toggleWrap = PCC.el('div', { class: 'featured-toggle' });
+      const toggleBtn = PCC.el('button', {
+        class: 'btn btn--outline featured-toggle__btn',
+        type: 'button',
+      }, expanded ? 'View Less' : 'View More');
+
+      toggleBtn.addEventListener('click', () => {
+        PCC.renderFeatured(mountId, initialLimit, !expanded);
+      });
+
+      toggleWrap.appendChild(toggleBtn);
+      mount.insertAdjacentElement('afterend', toggleWrap);
+    }
   };
 })(window);
