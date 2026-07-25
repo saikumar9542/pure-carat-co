@@ -21,7 +21,7 @@
       });
       a.appendChild(PCC.el('img', {
         class: 'category-card__img',
-        src: c.image,
+        src: PCC.asset(c.image),
         alt: c.name,
         loading: 'lazy',
       }));
@@ -37,7 +37,7 @@
     const price = PCC.pricing.priceOf(p);
     const card = PCC.el('article', { class: 'product-card', 'data-id': p.id });
     const media = PCC.el('div', { class: 'product-card__media' });
-    media.appendChild(PCC.el('img', { src: p.image, alt: p.name, loading: 'lazy' }));
+    media.appendChild(PCC.el('img', { src: PCC.asset(p.image), alt: p.name, loading: 'lazy' }));
     const body = PCC.el('div', { class: 'product-card__body' });
     body.appendChild(PCC.el('h3', { class: 'product-card__name' }, p.name));
     body.appendChild(PCC.el('p', { class: 'product-card__desc' }, p.description));
@@ -90,5 +90,12 @@
       toggleWrap.appendChild(toggleBtn);
       mount.insertAdjacentElement('afterend', toggleWrap);
     }
+  };
+
+  PCC.renderProductList = function (mountId, products = PRODUCTS) {
+    const mount = document.getElementById(mountId);
+    if (!mount) return;
+    mount.innerHTML = '';
+    products.forEach((p) => mount.appendChild(PCC.renderProductCard(p)));
   };
 })(window);

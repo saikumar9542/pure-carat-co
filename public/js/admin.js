@@ -140,7 +140,7 @@
         const total = Math.round(gv + sv + overrideRates.makingCharges);
         return `
           <div class="rate-preview__row">
-            <img src="${p.image}" alt="" />
+            <img src="${PCC.asset(p.image)}" alt="" />
             <div class="rate-preview__meta">
               <strong>${p.name}</strong>
               <small>${p.goldWeight || 0}g gold${p.silverWeight ? ` · ${p.silverWeight}g silver` : ''}</small>

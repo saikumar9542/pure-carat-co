@@ -47,6 +47,20 @@
 
   PCC.uid = () => 'ORD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
 
-  /* Resolve relative path depending on whether we're in /pages/ or root */
-  PCC.base = () => (location.pathname.includes('/pages/') ? '../' : '');
+  /* Resolve relative path depending on the current page depth. */
+  PCC.base = () => {
+    const path = location.pathname.replace(/\\/g, '/');
+    const marker = '/pages/';
+    const pos = path.indexOf(marker);
+    if (pos === -1) return '';
+    const relativePath = path.slice(pos + marker.length);
+    const depth = relativePath.split('/').filter(Boolean).length;
+    return '../'.repeat(depth);
+  };
+
+  PCC.asset = (assetPath) => {
+    if (!assetPath) return '';
+    if (/^(?:https?:)?\/\//.test(assetPath) || assetPath.startsWith('/')) return assetPath;
+    return `${PCC.base()}${assetPath}`;
+  };
 })(window);

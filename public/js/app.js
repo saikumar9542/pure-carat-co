@@ -15,7 +15,7 @@
     switch (key) {
       case 'home':       return `${base}index.html`;
       case 'categories': return `${base}index.html#categories`;
-      case 'products':   return `${base}index.html#categories`;
+      case 'products':   return `${base}pages/product.html`;
       case 'about':      return `${base}pages/about.html`;
       case 'contact':    return `${base}pages/contact.html`;
       case 'cart':       return `${base}pages/cart.html`;
@@ -167,7 +167,7 @@
           href: `${PCC.base()}pages/category.html?cat=${p.category}`,
         });
         row.addEventListener('click', closeSearch);
-        row.appendChild(PCC.el('img', { src: p.image, alt: p.name, loading: 'lazy' }));
+        row.appendChild(PCC.el('img', { src: PCC.asset(p.image), alt: p.name, loading: 'lazy' }));
         const meta = PCC.el('div', {});
         meta.appendChild(PCC.el('h4', { class: 'search-result__name' }, p.name));
         meta.appendChild(PCC.el('div', { class: 'search-result__price' }, PCC.formatPrice(PCC.pricing.priceOf(p))));
@@ -176,6 +176,12 @@
       });
     }, 150));
   }
+
+  PCC.renderHeader = renderHeader;
+  PCC.renderFooter = renderFooter;
+  PCC.initSearch = initSearch;
+  PCC.openSearch = openSearch;
+  PCC.closeSearch = closeSearch;
 
   document.addEventListener('DOMContentLoaded', () => {
     renderHeader();

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products — Gold Works.</title>
+  <meta name="description" content="Explore our full jewellery collection at Pure Carat Co." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+  <header class="site-header" id="siteHeader"></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="breadcrumb">Home / Products</div>
+        <h1>All Products</h1>
+        <p>Browse our full curated jewellery collection.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="product-grid" id="productGrid"></div>
+        <nav class="pagination" id="productPager" aria-label="Product pagination"></nav>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="siteFooter"></footer>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <div class="search-overlay__inner">
+      <input type="search" id="searchInput" placeholder="Search…" aria-label="Search products" />
+      <button class="icon-btn" id="searchClose" aria-label="Close search"><i class="fa-solid fa-xmark"></i></button>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <script src="../data/products.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/pricing.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/products.js"></script>
+  <script src="../js/pagination.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      PCC.renderHeader();
+      PCC.renderFooter();
+      PCC.paginate({
+        items: PRODUCTS,
+        perPage: 8,
+        mountGrid: 'productGrid',
+        mountPager: 'productPager',
+        renderItem: (p) => PCC.renderProductCard(p),
+      });
+      PCC.initSearch?.();
+      PCC.updateCartCount();
+    });
+  </script>
+</body>
+</html>
