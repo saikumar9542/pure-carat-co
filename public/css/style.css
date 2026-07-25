@@ -214,6 +214,12 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; margin: 0 0
 .product-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px;
 }
+.featured-toggle {
+  display: flex; justify-content: center; margin-top: 24px;
+}
+.featured-toggle__btn {
+  min-width: 140px;
+}
 .product-card {
   background: var(--white); border-radius: var(--radius-lg);
   overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--soft-grey);
