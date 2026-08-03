@@ -21,9 +21,12 @@
   .section { padding: 64px 0; }
   .nav { display: none; }
   .hamburger { display: grid; }
-  .mobile-nav { display: block; }
+  .mobile-nav { display: flex; }
   .brand__tag { display: none; }
-  .hero { min-height: 70vh; }
+  .hero { min-height: 72vh; }
+  .hero__title { font-size: clamp(34px, 10vw, 48px); letter-spacing: .12em; }
+  .hero__subtitle { font-size: 15px; max-width: 90%; }
+  .btn--gold { padding: 14px 32px; }
   .category-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .product-card__body { padding: 14px; }
