@@ -50,8 +50,7 @@
         </div>
       </div>
       <div class="mobile-nav" id="mobileNav" aria-hidden="true">
-        ${NAV_LINKS.map((l) => `<a href="${resolveHref(l.href)}">${l.label}</a>`).join('')}
-        <a href="${resolveHref('cart')}">Cart</a>
+        ${NAV_LINKS.filter((l) => !['products', 'about', 'cart'].includes(l.href)).map((l) => `<a href="${resolveHref(l.href)}">${l.label}</a>`).join('')}
       </div>
     `;
 
