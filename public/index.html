@@ -14,6 +14,8 @@
   <meta property="og:title" content="Gold Jewellery Online | Gold Works" />
   <meta property="og:description" content="Explore elegant gold jewellery at Gold Works, featuring beautiful necklaces, earrings, rings and bracelets for every occasion." />
   <meta property="og:image" content="https://goldworks.shop/assets/logo/gold-jewellery-goldworks.jpg" />
+  <meta property="og:image:secure_url" content="https://goldworks.shop/assets/logo/gold-jewellery-goldworks.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Gold necklace, earrings and rings from Gold Works" />
@@ -40,13 +42,19 @@
     "@type": "WebSite",
     "name": "Gold Works",
     "alternateName": "Pure Carat Co",
-    "url": "https://goldworks.shop/"
+    "url": "https://goldworks.shop/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://goldworks.shop/?s={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
   }
   </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "JewelryStore",
+    "@id": "https://goldworks.shop/#organization",
     "name": "Gold Works",
     "url": "https://goldworks.shop/",
     "image": "https://goldworks.shop/assets/logo/gold-jewellery-goldworks.jpg",
@@ -59,7 +67,7 @@
       "postalCode": "400001",
       "addressCountry": "IN"
     },
-    "openingHours": "Mo-Sa 11:00-19:00"
+    "openingHours": ["Mo-Sa 11:00-19:00"]
   }
   </script>
 </head>
