@@ -98,4 +98,35 @@
     mount.innerHTML = '';
     products.forEach((p) => mount.appendChild(PCC.renderProductCard(p)));
   };
+
+  PCC.injectProductJsonLD = function (products = []) {
+    if (!products || !products.length) return;
+    const graph = products.map((p) => {
+      const price = Number(PCC.pricing.priceOf ? PCC.pricing.priceOf(p) : 0);
+      return {
+        "@type": "Product",
+        "@id": `${PCC.base()}pages/product.html?id=${p.id}`,
+        "sku": String(p.id),
+        "name": p.name,
+        "description": p.description,
+        "image": [PCC.asset(p.image)],
+        "brand": { "@type": "Brand", "name": "Gold Works" },
+        "offers": {
+          "@type": "Offer",
+          "url": `${PCC.base()}pages/product.html?id=${p.id}`,
+          "priceCurrency": "INR",
+          "price": price,
+          "availability": "https://schema.org/InStock"
+        }
+      };
+    });
+    const payload = { "@context": "https://schema.org", "@graph": graph };
+    const existing = document.getElementById('pcc-product-jsonld');
+    if (existing) existing.remove();
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'pcc-product-jsonld';
+    s.textContent = JSON.stringify(payload, null, 2);
+    document.head.appendChild(s);
+  };
 })(window);

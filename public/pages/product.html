@@ -60,6 +60,7 @@
         mountGrid: 'productGrid',
         mountPager: 'productPager',
         renderItem: (p) => PCC.renderProductCard(p),
+        onPageRendered: (pageItems) => { PCC.injectProductJsonLD?.(pageItems); },
       });
       PCC.initSearch?.();
       PCC.updateCartCount();

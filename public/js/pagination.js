@@ -2,7 +2,7 @@
 (function (global) {
   const PCC = global.PCC || (global.PCC = {});
 
-  PCC.paginate = function ({ items, perPage = 6, mountGrid, mountPager, renderItem }) {
+  PCC.paginate = function ({ items, perPage = 6, mountGrid, mountPager, renderItem, onPageRendered }) {
     const grid = typeof mountGrid === 'string' ? document.getElementById(mountGrid) : mountGrid;
     const pager = typeof mountPager === 'string' ? document.getElementById(mountPager) : mountPager;
     if (!grid) return;
@@ -14,6 +14,9 @@
       const start = (current - 1) * perPage;
       items.slice(start, start + perPage).forEach((it) => grid.appendChild(renderItem(it)));
       drawPager();
+      if (typeof onPageRendered === 'function') {
+        try { onPageRendered(items.slice(start, start + perPage)); } catch (e) { /* ignore */ }
+      }
       grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
