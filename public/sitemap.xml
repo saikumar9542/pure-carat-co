@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
     <loc>https://goldworks.shop/</loc>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>always</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
     <loc>https://goldworks.shop/pages/about.html</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://goldworks.shop/pages/contact.html</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://goldworks.shop/pages/category.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://goldworks.shop/pages/product.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
+
+  <url><loc>https://goldworks.shop/pages/category.html?cat=necklaces</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=chokers</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=rani-haar</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=mangalsutra</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=studs</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=jhumkas</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=rings</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=bracelets</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=bangles</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.8</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=maang-tikka</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=passa</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.6</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=belly-chains</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.6</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=nose-pins</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.6</priority></url>
+  <url><loc>https://goldworks.shop/pages/category.html?cat=anklets</loc><lastmod>2026-08-10</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+
 </urlset>

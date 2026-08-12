@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /*?*sort=
+Disallow: /*?*page=
+Disallow: /search
+Disallow: /cart
+Disallow: /checkout
 
 Sitemap: https://goldworks.shop/sitemap.xml
