@@ -70,7 +70,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(location.search);
       const slug = params.get('cat') || 'rings';
-      PCC.renderCategoryPage({
+      const renderCategory = () => PCC.renderCategoryPage({
         slug,
         titleEl: document.getElementById('pageTitle'),
         subtitleEl: document.getElementById('pageSubtitle'),
@@ -78,6 +78,9 @@
         gridId: 'grid',
         pagerId: 'pager',
       });
+      renderCategory();
+      document.addEventListener('pcc:products:loaded', renderCategory, { once: true });
+      PCC.loadSharedProducts();
     });
   </script>
 </body>

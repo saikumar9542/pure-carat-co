@@ -2,11 +2,32 @@
 (function (global) {
   const PCC = global.PCC || (global.PCC = {});
 
+  let sharedProducts = [];
+  let productsReady = false;
+  let sharedProductsPromise = null;
+  PCC.getProducts = () => PRODUCTS.concat(sharedProducts);
+  PCC.setSharedProducts = (items) => {
+    sharedProducts = Array.isArray(items) ? items : [];
+    productsReady = true;
+    return sharedProducts;
+  };
+  PCC.loadSharedProducts = async function () {
+    if (productsReady) return sharedProducts;
+    if (!sharedProductsPromise) {
+      sharedProductsPromise = PCC.api?.getProducts?.().catch(() => null);
+    }
+    const result = await sharedProductsPromise;
+    PCC.setSharedProducts(result?.ok && Array.isArray(result.products) ? result.products : []);
+    document.dispatchEvent(new CustomEvent('pcc:products:loaded'));
+    return sharedProducts;
+  };
   PCC.getCategory = (slug) => CATEGORIES.find((c) => c.slug === slug);
-  PCC.getProductsByCategory = (slug) => PRODUCTS.filter((p) => p.category === slug);
-  PCC.getProduct = (id) => PRODUCTS.find((p) => p.id === Number(id));
-  PCC.getFeatured = (limit = 8) =>
-    FEATURED_IDS.map((id) => PCC.getProduct(id)).filter(Boolean).slice(0, limit);
+  PCC.getProductsByCategory = (slug) => PCC.getProducts().filter((p) => p.category === slug);
+  PCC.getProduct = (id) => PCC.getProducts().find((p) => String(p.id) === String(id));
+  PCC.getFeatured = (limit = 8) => {
+    const featured = FEATURED_IDS.map((id) => PRODUCTS.find((p) => String(p.id) === String(id))).filter(Boolean);
+    return featured.concat(sharedProducts).slice(0, limit);
+  };
 
   PCC.renderCategoryGrid = function (mountId) {
     const mount = document.getElementById(mountId);
@@ -41,9 +62,9 @@
     const body = PCC.el('div', { class: 'product-card__body' });
     body.appendChild(PCC.el('h3', { class: 'product-card__name' }, p.name));
     body.appendChild(PCC.el('p', { class: 'product-card__desc' }, p.description));
-    if (p.goldWeight) {
+    if (p.goldWeight || p.silverWeight) {
       body.appendChild(PCC.el('p', { class: 'product-card__weight' },
-        `${p.goldWeight} g gold${p.silverWeight ? ` · ${p.silverWeight} g silver` : ''}`));
+        `${p.goldWeight ? `${p.goldWeight} g gold` : ''}${p.goldWeight && p.silverWeight ? ' · ' : ''}${p.silverWeight ? `${p.silverWeight} g silver` : ''}`));
     }
     body.appendChild(PCC.el('div', {
       class: 'product-card__price',
@@ -92,7 +113,7 @@
     }
   };
 
-  PCC.renderProductList = function (mountId, products = PRODUCTS) {
+  PCC.renderProductList = function (mountId, products = PCC.getProducts()) {
     const mount = document.getElementById(mountId);
     if (!mount) return;
     mount.innerHTML = '';

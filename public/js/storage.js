@@ -25,6 +25,7 @@
     saveAdmin(a)    { sessionStorage.setItem(ADMIN_KEY, JSON.stringify(a)); },
     getAdmin()      { try { return JSON.parse(sessionStorage.getItem(ADMIN_KEY)); } catch { return null; } },
     clearAdmin()    { sessionStorage.removeItem(ADMIN_KEY); },
+
   };
 
   /* ------- Apps Script transport (text/plain to avoid CORS preflight) ------- */
@@ -53,6 +54,9 @@
     getOrders:   (token)      => post({ action: 'getOrders', token }),
     updateStatus:(token, o)   => post({ action: 'updateOrderStatus', token, payload: o }),
     setRates:    (token, r)   => post({ action: 'setRates', token, payload: r }),
+    getProducts: () => get('getProducts'),
+    saveProduct: (token, product) => post({ action: 'saveProduct', token, payload: product }),
+    deleteProduct: (token, id) => post({ action: 'deleteProduct', token, payload: { id } }),
     // GET so any visitor can read the shared rate without a token / preflight.
     async getRates() {
       if (!SCRIPT_URL) return { ok: false, error: 'SCRIPT_URL not configured' };
@@ -62,6 +66,14 @@
       } catch (err) { return { ok: false, error: err.message }; }
     },
   };
+
+  async function get(action) {
+    if (!SCRIPT_URL) return { ok: false, error: 'SCRIPT_URL not configured' };
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=${encodeURIComponent(action)}`, { method: 'GET', redirect: 'follow' });
+      return await res.json();
+    } catch (err) { return { ok: false, error: err.message }; }
+  }
 
   /* Back-compat alias used by checkout.js */
   PCC.submitOrder = async function (order) {

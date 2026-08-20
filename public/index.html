@@ -51,9 +51,9 @@
       "@id": "https://goldworks.shop/#organization",
       "name": "Gold Works",
       "url": "https://goldworks.shop/",
-      "logo": "https://goldworks.shop/assets/logo/goldworks-favicon.ico"
+      "logo": "https://goldworks.shop/assets/logo/shopLogo.png"
     },
-    "logo": "https://goldworks.shop/assets/logo/goldworks-favicon.ico"
+    "logo": "https://goldworks.shop/assets/logo/shopLogo.png"
   }
   </script>
 </head>
@@ -145,6 +145,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       PCC.renderCategoryGrid('categoryGrid');
       PCC.renderFeatured('featuredGrid', 4);
+      document.addEventListener('pcc:products:loaded', () => PCC.renderFeatured('featuredGrid', 4), { once: true });
+      PCC.loadSharedProducts();
     });
   </script>
 </body>

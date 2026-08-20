@@ -66,16 +66,21 @@
   <script src="../js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      const renderProducts = () => {
+        PCC.paginate({
+          items: PCC.getProducts(),
+          perPage: 8,
+          mountGrid: 'productGrid',
+          mountPager: 'productPager',
+          renderItem: (p) => PCC.renderProductCard(p),
+          onPageRendered: (pageItems) => { PCC.injectProductJsonLD?.(pageItems); },
+        });
+      };
       PCC.renderHeader();
       PCC.renderFooter();
-      PCC.paginate({
-        items: PRODUCTS,
-        perPage: 8,
-        mountGrid: 'productGrid',
-        mountPager: 'productPager',
-        renderItem: (p) => PCC.renderProductCard(p),
-        onPageRendered: (pageItems) => { PCC.injectProductJsonLD?.(pageItems); },
-      });
+      renderProducts();
+      document.addEventListener('pcc:products:loaded', renderProducts, { once: true });
+      PCC.loadSharedProducts();
       PCC.initSearch?.();
       PCC.updateCartCount();
     });

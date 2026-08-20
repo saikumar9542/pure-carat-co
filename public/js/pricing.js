@@ -90,7 +90,7 @@
   /* Refresh prices on the current page when rates change. */
   document.addEventListener('pcc:rates:changed', () => {
     document.querySelectorAll('[data-product-price]').forEach((el) => {
-      const id = Number(el.dataset.productPrice);
+      const id = el.dataset.productPrice;
       const p = PCC.getProduct && PCC.getProduct(id);
       if (p) el.textContent = PCC.formatPrice(PCC.pricing.priceOf(p));
     });
