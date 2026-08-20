@@ -74,6 +74,115 @@
     initOrdersTab(admin.token);
   };
 
+  /* ---- Product manager ---- */
+  PCC.initAdminProducts = async function () {
+    const admin = PCC.storage.getAdmin();
+    if (!admin) { location.href = 'login.html'; return; }
+
+    const form = document.getElementById('productForm');
+    const list = document.getElementById('adminProductsList');
+    const imageInput = document.getElementById('productImage');
+    const imagePreview = document.getElementById('productImagePreview');
+    const formTitle = document.getElementById('productFormTitle');
+    const cancelBtn = document.getElementById('productCancel');
+    const error = document.getElementById('productFormError');
+    let editingId = null;
+    let selectedImage = '';
+
+    document.getElementById('adminWho').textContent = admin.username;
+    document.getElementById('adminLogout').addEventListener('click', () => {
+      PCC.storage.clearAdmin(); location.href = 'login.html';
+    });
+    document.getElementById('adminProductsBack').addEventListener('click', () => { location.href = 'dashboard.html'; });
+
+    CATEGORIES.forEach((category) => {
+      document.getElementById('productCategory').appendChild(PCC.el('option', { value: category.slug }, category.name));
+    });
+
+    imageInput.addEventListener('input', () => {
+      selectedImage = imageInput.value.trim();
+      imagePreview.src = PCC.asset(selectedImage);
+      imagePreview.hidden = !selectedImage;
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); error.textContent = '';
+      const data = new FormData(form);
+      const name = String(data.get('name') || '').trim();
+      const description = String(data.get('description') || '').trim();
+      const weight = Number(data.get('weight'));
+      const image = selectedImage || (editingId ? PCC.getProduct(editingId)?.image : '');
+      if (!name || !description || !image || !Number.isFinite(weight) || weight <= 0) {
+        error.textContent = 'Add a name, description, image, and weight greater than zero.'; return;
+      }
+      const metal = data.get('metal');
+      const product = { id: editingId || '', category: data.get('category'), name, description, image, metal, weight };
+      try {
+        const result = await PCC.api.saveProduct(admin.token, product);
+        if (!result?.ok) throw new Error(result?.error || 'Could not save product');
+        PCC.setSharedProducts(result.products || []);
+        resetForm(); renderList(result.products);
+        PCC.toast(editingId ? 'Product updated' : 'Product uploaded', 'gold');
+      } catch (saveError) {
+        error.textContent = saveError.message === 'Unknown action: saveProduct'
+          ? 'The Apps Script deployment is outdated. Save and redeploy apps-script/Code.gs, then try again.'
+          : saveError.message === 'Product image must be a public HTTPS URL'
+            ? 'The Apps Script deployment is outdated. Redeploy the latest apps-script/Code.gs to allow assets/... image paths.'
+          : saveError.message === 'Product image must be a public HTTPS URL or a relative asset path'
+            ? 'Use an HTTPS image URL or a relative asset path such as assets/products/rings/item.jpg.'
+          : (saveError.message || 'Could not save this product.');
+      }
+    });
+
+    cancelBtn.addEventListener('click', resetForm);
+    await PCC.loadSharedProducts();
+    renderList();
+
+    function renderList(items = PCC.getProducts()) {
+      document.getElementById('adminProductsMeta').textContent = `${items.length} uploaded item${items.length === 1 ? '' : 's'}`;
+      list.innerHTML = '';
+      if (!items.length) { list.appendChild(PCC.el('p', { class: 'admin-products-empty' }, 'No uploaded products yet.')); return; }
+      items.forEach((item) => {
+        const category = PCC.getCategory(item.category);
+        const card = PCC.el('article', { class: 'admin-product-row' });
+        card.appendChild(PCC.el('img', { src: PCC.asset(item.image), alt: item.name }));
+        const meta = PCC.el('div', { class: 'admin-product-row__meta' });
+        meta.appendChild(PCC.el('h3', {}, item.name));
+        meta.appendChild(PCC.el('p', {}, `${category?.name || item.category} · ${item.goldWeight ? item.goldWeight + ' g gold' : item.silverWeight + ' g silver'}`));
+        card.appendChild(meta);
+        const actions = PCC.el('div', { class: 'admin-product-row__actions' });
+        const edit = PCC.el('button', { type: 'button', class: 'btn btn--outline btn--sm' }, 'Edit');
+        edit.addEventListener('click', () => startEdit(item));
+        const remove = PCC.el('button', { type: 'button', class: 'btn btn--dark btn--sm' }, 'Delete');
+        remove.addEventListener('click', () => {
+          if (!confirm(`Delete ${item.name}?`)) return;
+          PCC.api.deleteProduct(admin.token, item.id).then((result) => {
+            if (!result?.ok) throw new Error(result?.error || 'Could not delete product');
+            PCC.setSharedProducts(result.products || []);
+            renderList(result.products); PCC.toast('Product deleted');
+          }).catch((deleteError) => { error.textContent = deleteError.message; });
+        });
+        actions.append(edit, remove); card.appendChild(actions); list.appendChild(card);
+      });
+    }
+
+    function startEdit(item) {
+      editingId = item.id; selectedImage = item.image;
+      formTitle.textContent = 'Edit product';
+      form.name.value = item.name; form.description.value = item.description;
+      form.category.value = item.category;
+      form.metal.value = item.productMetal || (item.silverWeight ? 'silver' : 'gold');
+      form.weight.value = item.productWeight || item.silverWeight || item.goldWeight;
+      imageInput.value = item.image || '';
+      imagePreview.src = PCC.asset(item.image); imagePreview.hidden = false; cancelBtn.hidden = false;
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function resetForm() {
+      editingId = null; selectedImage = ''; form.reset(); formTitle.textContent = 'Upload a product';
+      imagePreview.hidden = true; imagePreview.removeAttribute('src'); cancelBtn.hidden = true; error.textContent = '';
+    }
+  };
+
   /* ---- Rates tab ---- */
   function initRatesTab() {
     const form  = document.getElementById('ratesForm');

@@ -13,7 +13,7 @@
       const p = PCC.getProduct(productId);
       if (!p) return;
       const items = this.items();
-      const existing = items.find((i) => i.id === p.id);
+      const existing = items.find((i) => String(i.id) === String(p.id));
       const price = PCC.pricing.priceOf(p);
       if (existing) existing.qty += qty;
       else items.push({ id: p.id, name: p.name, price, image: p.image, qty });
@@ -22,11 +22,11 @@
     },
 
     setQty(id, qty) {
-      const items = this.items().map((i) => (i.id === id ? { ...i, qty: Math.max(1, qty) } : i));
+      const items = this.items().map((i) => (String(i.id) === String(id) ? { ...i, qty: Math.max(1, qty) } : i));
       PCC.storage.setCart(items);
     },
 
-    remove(id) { PCC.storage.setCart(this.items().filter((i) => i.id !== id)); },
+    remove(id) { PCC.storage.setCart(this.items().filter((i) => String(i.id) !== String(id))); },
     clear()   { PCC.storage.clearCart(); },
   };
 
@@ -44,6 +44,6 @@
     const btn = e.target.closest('[data-add-cart]');
     if (!btn) return;
     e.preventDefault();
-    PCC.cart.add(Number(btn.dataset.addCart));
+    PCC.cart.add(btn.dataset.addCart);
   });
 })(window);

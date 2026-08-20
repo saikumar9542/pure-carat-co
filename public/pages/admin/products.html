@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Products — Pure Carat Co</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="../../css/style.css" />
+  <link rel="stylesheet" href="../../css/responsive.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body class="admin-body">
+  <header class="admin-header">
+    <a class="admin-header__brand" href="../../index.html">
+      <span class="brand__mark">P</span>
+      <span><span class="brand__name">PURE CARAT</span><span class="brand__tag">Admin</span></span>
+    </a>
+    <div class="admin-header__actions">
+      <span class="admin-header__user"><i class="fa-regular fa-user"></i> <span id="adminWho"></span></span>
+      <button class="btn btn--outline btn--sm" id="adminProductsBack" type="button"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+      <button class="btn btn--dark btn--sm" id="adminLogout" type="button"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+    </div>
+  </header>
+
+  <main class="admin-main admin-products-page">
+    <section class="admin-panel active">
+      <div class="admin-panel__head">
+        <div><p class="admin-welcome__eyebrow">Catalog control</p><h1>Manage products</h1><p>Add jewellery cards to the live catalog or update existing ones.</p></div>
+        <strong id="adminProductsMeta" class="rates-meta"></strong>
+      </div>
+      <div class="admin-products-layout">
+        <form id="productForm" class="product-admin-form">
+          <h2 id="productFormTitle">Upload a product</h2>
+          <div class="form-grid">
+            <div class="field field--full"><label for="productName">Product name</label><input id="productName" name="name" required /></div>
+            <div class="field field--full"><label for="productDescription">Description</label><textarea id="productDescription" name="description" rows="3" required></textarea></div>
+            <div class="field"><label for="productCategory">Category</label><select id="productCategory" name="category" required></select></div>
+            <div class="field"><label for="productMetal">Material</label><select id="productMetal" name="metal"><option value="gold">Gold</option><option value="silver">Silver</option></select></div>
+            <div class="field"><label for="productWeight">Weight (grams)</label><input id="productWeight" name="weight" type="number" min="0.01" step="0.01" required /></div>
+            <div class="field field--full"><label for="productImage">Product image URL or asset path</label><input id="productImage" name="image" type="text" placeholder="https://example.com/image.jpg or assets/products/rings/item.jpg" required /><small class="field-help">Use a public HTTPS URL or an existing relative asset path such as assets/products/rings/item.jpg.</small><img id="productImagePreview" class="product-admin-form__preview" alt="Product preview" hidden /></div>
+          </div>
+          <p id="productFormError" class="admin-auth__error" role="alert"></p>
+          <div class="product-admin-form__actions"><button type="submit" class="btn btn--gold">Save product</button><button type="button" id="productCancel" class="btn btn--outline" hidden>Cancel edit</button></div>
+        </form>
+        <section class="admin-products-list-wrap"><div class="admin-products-list-head"><h2>Uploaded cards</h2><p>These items appear immediately on Products and their category page.</p></div><div id="adminProductsList" class="admin-products-list"></div></section>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../data/products.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/pricing.js"></script>
+  <script src="../../js/storage.js"></script>
+  <script src="../../js/products.js"></script>
+  <script src="../../js/admin.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => PCC.initAdminProducts());</script>
+</body>
+</html>

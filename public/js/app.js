@@ -108,7 +108,7 @@
           <div>
             <h4>Contact</h4>
             <p><i class="fa-solid fa-envelope"></i> hello@purecarat.co</p>
-            <p><i class="fa-solid fa-phone"></i> +91 95422 64196</p>
+            <p><i class="fa-solid fa-phone"></i> +91 9*****</p>
             <form class="newsletter" onsubmit="event.preventDefault(); PCC.toast('Subscribed — thank you!', 'gold'); this.reset();">
               <input type="email" placeholder="Your email" required aria-label="Email address" />
               <button type="submit">Join</button>
@@ -147,11 +147,12 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSearch(); });
     // Click the dim backdrop to dismiss.
     overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
-    input.addEventListener('input', PCC.debounce(() => {
+    input.addEventListener('input', PCC.debounce(async () => {
+      await PCC.loadSharedProducts?.();
       const q = input.value.trim().toLowerCase();
       results.innerHTML = '';
       if (!q) return;
-      const matches = PRODUCTS.filter((p) =>
+      const matches = PCC.getProducts().filter((p) =>
         p.name.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q)

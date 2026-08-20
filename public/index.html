@@ -145,6 +145,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       PCC.renderCategoryGrid('categoryGrid');
       PCC.renderFeatured('featuredGrid', 4);
+      document.addEventListener('pcc:products:loaded', () => PCC.renderFeatured('featuredGrid', 4), { once: true });
+      PCC.loadSharedProducts();
     });
   </script>
 </body>

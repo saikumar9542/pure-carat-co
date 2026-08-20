@@ -63,9 +63,9 @@ const PRODUCTS = [
   { id: 20, category: 'rani-haar',   name: 'Rani Haar',                   description: 'Traditional temple necklace with matching earrings.',   goldWeight: 18.2, image: 'assets/products/neck-ranihaar/Lakshmi Coin Heritage Gold Long Necklace (Temple Style).jpg' }, 
   { id: 21, category: 'rani-haar',   name: 'Rani Haar',                   description: 'Traditional temple necklace with matching earrings.',   goldWeight: 18.2, image: 'assets/products/neck-ranihaar/Necklace.jpg' },
 
-  { id: 20, category: 'mangalsutra',name: 'Long Mangalsutra',   description: 'Elegant long mangalsutra with black beads.',            goldWeight: 9.6,  image: 'assets/products/neck-mangalsutra/download (2).jpg' },
-  { id: 21, category: 'mangalsutra',name: 'Short Mangalsutra',  description: 'Delicate short mangalsutra with gold pendant.',         goldWeight: 6.4,  image: 'assets/products/neck-mangalsutra/long mangalsutra _ Gold jewellery _ 22 karat.jpg' }, 
-  { id: 22, category: 'mangalsutra',name: 'Mangalsutra Set',    description: 'Matching mangalsutra set with earrings.',              goldWeight: 12.8, image: 'assets/products/neck-mangalsutra/download (3).jpg' }, 
+  { id: 23, category: 'mangalsutra',name: 'Long Mangalsutra',   description: 'Elegant long mangalsutra with black beads.',            goldWeight: 9.6,  image: 'assets/products/neck-mangalsutra/download (2).jpg' },
+  { id: 24, category: 'mangalsutra',name: 'Short Mangalsutra',  description: 'Delicate short mangalsutra with gold pendant.',         goldWeight: 6.4,  image: 'assets/products/neck-mangalsutra/long mangalsutra _ Gold jewellery _ 22 karat.jpg' }, 
+  { id: 25, category: 'mangalsutra',name: 'Mangalsutra Set',    description: 'Matching mangalsutra set with earrings.',              goldWeight: 12.8, image: 'assets/products/neck-mangalsutra/download (3).jpg' }, 
 
 
   // Earrings
@@ -113,8 +113,8 @@ const PRODUCTS = [
   { id: 76, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/download (6).jpg' },
   { id: 77, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/download (9).jpg' },
   { id: 78, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/download (10).jpg' },
-  { id: 75, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/Mahi Cubic Zirconia Gold Plated Daisy Bloom Floral Nose Ring for Womens.jpg' },
-  { id: 76, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/Traditional Pearl & Kundan Nose Pin _ Elegant Indian Nath Design for Festive & Bridal Wear.jpg' },
+  { id: 79, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/Mahi Cubic Zirconia Gold Plated Daisy Bloom Floral Nose Ring for Womens.jpg' },
+  { id: 87, category: 'nose-pins',   name: 'Nose Pin',          description: 'Delicate gold nose pin with floral motif.',             goldWeight: 1.8,  image: 'assets/products/nose-pins/Traditional Pearl & Kundan Nose Pin _ Elegant Indian Nath Design for Festive & Bridal Wear.jpg' },
 
   // Anklets — silver piece
   { id: 80, category: 'anklets',    name: 'Payal Delight',      description: 'Silver ghungroo anklet with gold plating.',             goldWeight: 18.4, silverWeight: 0, image: 'assets/products/feet-anklet/Slim Golden Brass Cuban Braided Chain Minimalist Slim Foot Payal Anklet.jpg' },

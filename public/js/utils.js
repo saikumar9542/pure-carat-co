@@ -60,7 +60,7 @@
 
   PCC.asset = (assetPath) => {
     if (!assetPath) return '';
-    if (/^(?:https?:)?\/\//.test(assetPath) || assetPath.startsWith('/')) return assetPath;
+    if (/^(?:https?:)?\/\//.test(assetPath) || assetPath.startsWith('/') || assetPath.startsWith('data:')) return assetPath;
     return `${PCC.base()}${assetPath}`;
   };
 })(window);

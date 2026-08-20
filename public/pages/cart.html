@@ -113,9 +113,9 @@
       const inc = e.target.closest('[data-inc]');
       const dec = e.target.closest('[data-dec]');
       const rm = e.target.closest('[data-remove]');
-      if (inc) { const id = Number(inc.dataset.inc); const it = PCC.cart.items().find((i)=>i.id===id); if (it) PCC.cart.setQty(id, it.qty + 1); }
-      if (dec) { const id = Number(dec.dataset.dec); const it = PCC.cart.items().find((i)=>i.id===id); if (it) PCC.cart.setQty(id, it.qty - 1); }
-      if (rm)  { PCC.cart.remove(Number(rm.dataset.remove)); }
+      if (inc) { const id = inc.dataset.inc; const it = PCC.cart.items().find((i)=>String(i.id)===String(id)); if (it) PCC.cart.setQty(id, it.qty + 1); }
+      if (dec) { const id = dec.dataset.dec; const it = PCC.cart.items().find((i)=>String(i.id)===String(id)); if (it) PCC.cart.setQty(id, it.qty - 1); }
+      if (rm)  { PCC.cart.remove(rm.dataset.remove); }
     });
 
     document.addEventListener('pcc:cart:changed', renderCart);
