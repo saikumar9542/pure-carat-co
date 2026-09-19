@@ -234,11 +234,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; margin: 0 0
 .category-card__title { font-family: var(--font-display); font-size: 22px; margin: 0; letter-spacing: .06em; }
 .category-card__meta { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-light); }
 
-/* Offers aside */
-.offers { display: flex; flex-direction: column; gap: 16px; position: sticky; top: calc(var(--header-h) + 20px); }
-.offers__title { font-family: var(--font-display); font-size: 20px; margin: 0 0 4px; }
+/* Offers strip */
+.offers {
+  display: grid; grid-template-columns: repeat(3, minmax(260px, 1fr)); gap: 16px;
+  margin-top: 48px; overflow-x: auto; padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+.offers__title { grid-column: 1 / -1; font-family: var(--font-display); font-size: 20px; margin: 0; }
 .offer-card {
-  border-radius: var(--radius-lg); padding: 24px; background: var(--soft-grey);
+  min-width: 260px; border-radius: var(--radius-lg); padding: 24px; background: var(--soft-grey);
   border: 1px solid var(--grey);
 }
 .offer-card--dark { background: var(--ink); color: var(--white); border-color: var(--ink); }
@@ -565,14 +569,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; margin: 0 0
 }
 .admin-auth__hint code {
   background: var(--soft-grey); padding: 2px 6px; border-radius: 4px; font-size: 12px;
-}
-
-/* ---- Offers: sticky header + scrollable list on desktop ---- */
-.offers { max-height: calc(100vh - var(--header-h) - 60px); overflow-y: auto; padding-right: 4px; }
-.offers__title {
-  position: sticky; top: 0; z-index: 2;
-  background: var(--white); margin: 0 0 8px; padding: 6px 0 10px;
-  border-bottom: 1px solid var(--soft-grey);
 }
 
 /* ---- Admin welcome screen ---- */
