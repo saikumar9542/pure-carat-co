@@ -1,16 +1,6 @@
 /* Responsive breakpoints */
 
 @media (max-width: 1024px) {
-  .split { grid-template-columns: 1fr; }
-  .offers {
-    position: static;
-    flex-direction: row;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    max-height: none;
-  }
-  .offers .offer-card { min-width: 260px; flex-shrink: 0; }
-  .offers__title { position: static; padding: 0 0 4px; background: transparent; }
   .cart-layout { grid-template-columns: 1fr; }
   .checkout-layout { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
