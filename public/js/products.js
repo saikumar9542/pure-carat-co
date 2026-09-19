@@ -66,11 +66,11 @@
       body.appendChild(PCC.el('p', { class: 'product-card__weight' },
         `${p.goldWeight ? `${p.goldWeight} g gold` : ''}${p.goldWeight && p.silverWeight ? ' · ' : ''}${p.silverWeight ? `${p.silverWeight} g silver` : ''}`));
     }
-    body.appendChild(PCC.el('div', {
+    const actions = PCC.el('div', { class: 'product-card__actions' });
+    actions.appendChild(PCC.el('div', {
       class: 'product-card__price',
       'data-product-price': p.id,
     }, PCC.formatPrice(price)));
-    const actions = PCC.el('div', { class: 'product-card__actions' });
     const addBtn = PCC.el('button', {
       class: 'btn btn--dark btn--sm',
       'data-add-cart': p.id,
